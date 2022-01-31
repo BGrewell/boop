@@ -2,12 +2,25 @@ package main
 
 import (
 	"context"
+	"flag"
 	"github.com/BGrewell/boop/internal"
-	"log"
+	log "github.com/sirupsen/logrus"
+
+	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 func processFlags() {
 
+	flag.String("ip", "", "ip address to listen on")
+
+	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+	pflag.Parse()
+	viper.BindPFlags(pflag.CommandLine)
+
+	if viper.GetString("ip") == "" {
+		log.Fatal("ip address is required")
+	}
 }
 
 func main() {
@@ -23,5 +36,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("error starting: %v\n", err)
 	}
+
+	<-ctx.Done()
 
 }

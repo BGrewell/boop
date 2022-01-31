@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"github.com/cakturk/go-netstat/netstat"
 )
 
@@ -42,13 +41,11 @@ func LocalV6UdpFilter(e *netstat.SockTabEntry) bool {
 
 func ListenersV4Loopback() (ports []ListeningPort, err error) {
 	udpListeners, err := EnumeratePorts("udp", 4)
-	fmt.Printf("v4udp: %d\n", len(udpListeners))
 	if err != nil {
 		return nil, err
 	}
 
 	tcpListeners, err := EnumeratePorts("tcp", 4)
-	fmt.Printf("v4tcp: %d\n", len(tcpListeners))
 	if err != nil {
 		return nil, err
 	}
@@ -92,13 +89,11 @@ func ListenersV4Loopback() (ports []ListeningPort, err error) {
 
 func ListenersV6Loopback() (ports []ListeningPort, err error) {
 	udpListeners, err := EnumeratePorts("udp", 6)
-	fmt.Printf("v6udp: %d\n", len(udpListeners))
 	if err != nil {
 		return nil, err
 	}
 
 	tcpListeners, err := EnumeratePorts("tcp", 6)
-	fmt.Printf("v6tcp: %d\n", len(tcpListeners))
 	if err != nil {
 		return nil, err
 	}

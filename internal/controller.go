@@ -1,10 +1,14 @@
 package internal
 
-import "context"
+import (
+	"context"
+	log "github.com/sirupsen/logrus"
+)
 
 func NewProxyController(ctx context.Context) (controller *ProxyController, err error) {
 	p := &ProxyController{
-		proxies: make([]Proxy, 0),
+		proxies:     make([]Proxy, 0),
+		exitOnError: false,
 	}
 	v4, err := ListenersV4Loopback()
 	if err != nil {
@@ -24,14 +28,18 @@ func NewProxyController(ctx context.Context) (controller *ProxyController, err e
 }
 
 type ProxyController struct {
-	proxies []Proxy
+	proxies     []Proxy
+	exitOnError bool
 }
 
 func (pc *ProxyController) Start(ctx context.Context) (err error) {
 	for _, proxy := range pc.proxies {
 		err = proxy.Start(ctx)
 		if err != nil {
-			return err
+			if pc.exitOnError {
+				return err
+			}
+			log.Warnf("%s\n", err)
 		}
 	}
 	return nil
@@ -40,9 +48,10 @@ func (pc *ProxyController) Start(ctx context.Context) (err error) {
 func (pc *ProxyController) Stop(ctx context.Context) (err error) {
 	for _, proxy := range pc.proxies {
 		err = proxy.Stop(ctx)
-		if err != nil {
+		if pc.exitOnError {
 			return err
 		}
+		log.Warnf("%s\n", err)
 	}
 	return nil
 }
