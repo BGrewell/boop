@@ -1,9 +1,27 @@
 package main
 
 import (
-  "fmt"
+	"context"
+	"github.com/BGrewell/boop/internal"
+	"log"
 )
 
+func processFlags() {
+
+}
+
 func main() {
-  fmt.Println("main template")
+
+	processFlags()
+	ctx := context.Background()
+	controller, err := internal.NewProxyController(ctx)
+	if err != nil {
+		log.Fatalf("error creating controller: %v\n", err)
+	}
+
+	err = controller.Start(ctx)
+	if err != nil {
+		log.Fatalf("error starting: %v\n", err)
+	}
+
 }
