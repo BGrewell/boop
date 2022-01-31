@@ -12,6 +12,9 @@ builds:
     goos:
       - linux
       - windows
+    goarch:
+      - amd64
+      - 386
     main: ./cmd/main.go
 archives:
   - replacements:
