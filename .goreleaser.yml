@@ -12,7 +12,6 @@ builds:
     goos:
       - linux
       - windows
-      - darwin
     main: ./cmd/main.go
 archives:
   - replacements:
